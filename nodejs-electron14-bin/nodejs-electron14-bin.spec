@@ -2,7 +2,7 @@
 
 Name:           nodejs-%{_electronver}-bin
 Version:        14.2.9
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Build cross-platform desktop apps with JavaScript, HTML, and CSS
 License:        MIT
 Url:            https://github.com/electron/electron
@@ -39,6 +39,9 @@ install -Dm755 %{SOURCE1} %{buildroot}%{_bindir}/%{_electronver}
 %{_datadir}/%{_electronver}/
 
 %changelog
+* Sun Apr 03 2022 zhullyb <zhullyb@outlook.com> - 14.2.9-2
+- rebuilt
+
 * Sun Apr 03 2022 zhullyb <zhullyb@outlook.com> - 14.2.9-1
 - new version
 

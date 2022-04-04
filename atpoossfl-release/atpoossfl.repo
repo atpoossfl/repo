@@ -1,0 +1,6 @@
+[atpoossfl]
+name=atpoossfl
+mirrorlist=file:///etc/yum.repos.d/atpoossfl.mirrorlist
+skip_if_unavailable=True
+gpgcheck=0
+enabled=1

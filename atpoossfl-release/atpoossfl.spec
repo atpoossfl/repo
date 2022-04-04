@@ -1,5 +1,5 @@
 Name:       atpoossfl-release
-Version:    1
+Version:    1.1
 Release:    1%{?dist}
 Summary:    Another Thirdpary-Owned Open-source Software Source for Fedora Linux
 License:    MIT

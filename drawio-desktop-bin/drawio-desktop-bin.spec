@@ -1,6 +1,6 @@
 Name:           drawio-desktop-bin
-Version:        17.2.4
-Release:        2%{?dist}
+Version:        17.4.2
+Release:        1%{?dist}
 Summary:        Diagram drawing application built on web technology
 
 License:        ASL 2.0
@@ -38,6 +38,9 @@ cp %{S:1} .
 %{_datadir}/mime/packages/drawio.xml
 
 %changelog
+* Mon Apr 11 2022 zhullyb <zhullyb@outlook.com> - 17.4.2-1
+- new version
+
 * Sun Apr 03 2022 zhullyb <zhullyb@outlook.com> - 17.2.4-2
 - Move the path of the software
 

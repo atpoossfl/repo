@@ -1,5 +1,5 @@
 Name:           fcitx5-pinyin-moegirl
-Version:        20220314
+Version:        20220414
 Release:        1%{?dist}
 Summary:        Fcitx 5 pinyin dictionary generator for MediaWiki instances. (Releases for demo dict of zh.moegirl.org.cn)
 License:        Unlicense;CC-BY-NC-SA-3.0
@@ -27,6 +27,9 @@ install -Dm644 %{SOURCE0} -t %{buildroot}%{_datadir}/fcitx5/pinyin/dictionaries/
 %{_datadir}/fcitx5/pinyin/dictionaries/moegirl.dict
 
 %changelog
+* Fri Apr 15 2022 zhullyb <zhullyb@outlook.com> - 20220414-1
+- new version
+
 * Tue Mar 15 2022 zhullyb <zhullyb@outlook.com> - 20220314-1
 - new version
 

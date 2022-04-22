@@ -3,8 +3,8 @@
 %global debug_package %{nil}
 
 Name:           balena-etcher
-Version:        1.7.8
-Release:        2%{?dist}
+Version:        1.7.9
+Release:        1%{?dist}
 Summary:        Flash OS images to SD cards & USB drives, safely and easily.
 License:        ASL 2.0
 Url:            https://github.com/balena-io/etcher
@@ -55,6 +55,9 @@ done
 %{_datadir}/icons/hicolor/*/apps/balena-etcher-electron.png
 
 %changelog
+* Fri Apr 22 2022 zhullyb <zhullyb@outlook.com> - 1.7.9-1
+- new version
+
 * Sun Apr 03 2022 zhullyb <zhullyb@outlook.com> - 1.7.8-2
 - Move the path of this software
 

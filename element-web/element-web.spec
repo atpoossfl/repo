@@ -1,6 +1,6 @@
 %global debug_package %{nil}
 %global     forgeurl    https://github.com/vector-im/element-web
-Version:    1.10.10
+Version:    1.10.11
 %forgemeta
 
 Name:           element-web
@@ -40,6 +40,9 @@ echo %{version} > %{buildroot}%{_datadir}/webapps/element/version
 %{_datadir}/webapps/element/
 
 %changelog
+* Tue Apr 26 2022 zhullyb <zhullyb@outlook.com> - 1.10.11-1
+- new version
+
 * Thu Apr 14 2022 zhullyb <zhullyb@outlook.com> - 1.10.10-1
 - new version
 

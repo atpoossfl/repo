@@ -2,7 +2,7 @@
 
 %{?!python3_pkgversion:%global python3_pkgversion 3}
 %global forgeurl https://github.com/BruceZhang1993/FastOCR
-Version:         0.3.6
+Version:         0.3.7
 %forgemeta
 
 Name:       fastocr
@@ -41,5 +41,8 @@ install -Dm644 fastocr/data/FastOCR.desktop %{buildroot}%{_datadir}/applications
 %{_datadir}/applications/FastOCR.desktop
 
 %changelog
+* Tue May 03 2022 zhullyb <zhullyb@outlook.com> - 0.3.7-1
+- new version
+
 * Mon Apr 11 2022 zhullyb <zhullyb@outlook.com> - 0.3.6-1
 - First build.

@@ -1,5 +1,5 @@
 Name:           drawio-desktop-bin
-Version:        17.4.2
+Version:        18.0.1
 Release:        1%{?dist}
 Summary:        Diagram drawing application built on web technology
 
@@ -9,7 +9,7 @@ Source0:        %{url}/releases/download/v%{version}/drawio-amd64-%{version}.deb
 Source1:        https://raw.githubusercontent.com/jgraph/drawio-desktop/release/LICENSE
 Source2:        drawio-launcher.sh
 
-Requires:       electron16
+Requires:       electron18
 
 %description
 %{summary}.
@@ -38,6 +38,9 @@ cp %{S:1} .
 %{_datadir}/mime/packages/drawio.xml
 
 %changelog
+* Thu May 05 2022 zhullyb <zhullyb@outlook.com> - 18.0.1-1
+- new version
+
 * Mon Apr 11 2022 zhullyb <zhullyb@outlook.com> - 17.4.2-1
 - new version
 

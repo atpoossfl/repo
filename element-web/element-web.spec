@@ -1,6 +1,6 @@
 %global debug_package %{nil}
 %global     forgeurl    https://github.com/vector-im/element-web
-Version:    1.10.11
+Version:    1.10.12
 %forgemeta
 
 Name:           element-web
@@ -12,7 +12,10 @@ Source0:        %{forgesource}
 
 BuildRequires:  python
 BuildRequires:  yarnpkg
-BuildRequires:  nodejs
+
+BuildRequires:  nodejs >= 2:17
+# https://rpm.nodesource.com/
+
 BuildRequires:  git
 
 %description
@@ -23,6 +26,7 @@ BuildRequires:  git
 yarn install --no-fund
 
 %build
+export NODE_OPTIONS=--openssl-legacy-provider
 VERSION=%{version} yarn build --offline
 
 %install
@@ -40,6 +44,10 @@ echo %{version} > %{buildroot}%{_datadir}/webapps/element/version
 %{_datadir}/webapps/element/
 
 %changelog
+* Wed May 11 2022 zhullyb <zhullyb@outlook.com> - 1.10.12-1
+- new version
+- add NODE_OPTIONS to fit openssl on Fedora 36.
+
 * Tue Apr 26 2022 zhullyb <zhullyb@outlook.com> - 1.10.11-1
 - new version
 

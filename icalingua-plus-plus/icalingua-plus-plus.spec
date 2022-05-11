@@ -4,7 +4,7 @@
 
 Name:           icalingua-plus-plus
 Version:        2.6.1
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        A Linux client for QQ and more
 License:        AGPL 3.0
 Url:            https://github.com/Icalingua-plus-plus/Icalingua-plus-plus
@@ -14,7 +14,10 @@ Source2:        icalingua-plus-plus.desktop
 Patch0:         icalingua-build-production.patch
 
 Requires:       electron17
-BuildRequires:  nodejs
+
+BuildRequires:  nodejs >= 2:17
+# https://rpm.nodesource.com/
+
 BuildRequires:  clang
 BuildRequires:  yarnpkg
 BuildRequires:  python
@@ -27,6 +30,7 @@ BuildRequires:  python
 %patch0
 
 %build
+export NODE_OPTIONS=--openssl-legacy-provider
 cd icalingua
 yarn
 yarn build:ci
@@ -47,6 +51,9 @@ install -Dm644 %{S:2} %{buildroot}%{_datadir}/applications/icalingua-plus-plus.d
 %{_datadir}/icons/hicolor/512x512/apps/icalingua-plus-plus.png
 
 %changelog
+* Wed May 11 2022 zhullyb <zhullyb@outlook.com> - 2.6.1-2
+- add NODE_OPTIONS to fit openssl on Fedora 36.
+
 * Sun Apr 03 2022 zhullyb <zhullyb@outlook.com> - 2.6.1-1
 - new version
 

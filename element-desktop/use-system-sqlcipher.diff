@@ -1,7 +1,7 @@
-diff -up element-desktop-1.10.11/hak/matrix-seshat/build.ts.orig element-desktop-1.10.11/hak/matrix-seshat/build.ts
---- element-desktop-1.10.11/hak/matrix-seshat/build.ts.orig	2022-05-14 20:45:42.367156500 +0800
-+++ element-desktop-1.10.11/hak/matrix-seshat/build.ts	2022-05-14 20:32:29.240937137 +0800
-@@ -26,13 +26,13 @@ export default async function(hakEnv: Ha
+diff -up element-desktop-1.10.12/hak/matrix-seshat/build.ts.orig element-desktop-1.10.12/hak/matrix-seshat/build.ts
+--- element-desktop-1.10.12/hak/matrix-seshat/build.ts.orig	2022-05-10 22:30:21.000000000 +0800
++++ element-desktop-1.10.12/hak/matrix-seshat/build.ts	2022-05-14 20:32:29.240937137 +0800
+@@ -26,7 +26,7 @@ export default async function(hakEnv: Ha
      if (hakEnv.isWin()) {
          await buildOpenSslWin(hakEnv, moduleInfo);
          await buildSqlCipherWin(hakEnv, moduleInfo);
@@ -10,31 +10,6 @@ diff -up element-desktop-1.10.11/hak/matrix-seshat/build.ts.orig element-desktop
          await buildSqlCipherUnix(hakEnv, moduleInfo);
      }
      await buildMatrixSeshat(hakEnv, moduleInfo);
- }
- 
--async function buildOpenSslWin(hakEnv, moduleInfo) {
-+async function buildOpenSslWin(hakEnv: HakEnv, moduleInfo: DependencyInfo) {
-     const version = moduleInfo.cfg.dependencies.openssl;
-     const openSslDir = path.join(moduleInfo.moduleTargetDotHakDir, `openssl-${version}`);
- 
-@@ -134,7 +134,7 @@ async function buildOpenSslWin(hakEnv, m
-     });
- }
- 
--async function buildSqlCipherWin(hakEnv, moduleInfo) {
-+async function buildSqlCipherWin(hakEnv: HakEnv, moduleInfo: DependencyInfo) {
-     const version = moduleInfo.cfg.dependencies.sqlcipher;
-     const sqlCipherDir = path.join(moduleInfo.moduleTargetDotHakDir, `sqlcipher-${version}`);
-     const buildDir = path.join(sqlCipherDir, 'bld');
-@@ -171,7 +171,7 @@ async function buildSqlCipherWin(hakEnv,
-     );
- }
- 
--async function buildSqlCipherUnix(hakEnv, moduleInfo) {
-+async function buildSqlCipherUnix(hakEnv: HakEnv, moduleInfo: DependencyInfo) {
-     const version = moduleInfo.cfg.dependencies.sqlcipher;
-     const sqlCipherDir = path.join(moduleInfo.moduleTargetDotHakDir, `sqlcipher-${version}`);
- 
 @@ -179,17 +179,12 @@ async function buildSqlCipherUnix(hakEnv
          '--prefix=' + moduleInfo.depPrefix + '',
          '--enable-tempstore=yes',
@@ -53,14 +28,7 @@ diff -up element-desktop-1.10.11/hak/matrix-seshat/build.ts.orig element-desktop
      if (!hakEnv.isHost()) {
          // In the nonsense world of `configure`, it is assumed you are building
          // a compiler like `gcc`, so the `host` option actually means the target
-@@ -264,20 +259,18 @@ async function buildSqlCipherUnix(hakEnv
-     });
- }
- 
--async function buildMatrixSeshat(hakEnv, moduleInfo) {
-+async function buildMatrixSeshat(hakEnv: HakEnv, moduleInfo: DependencyInfo) {
-     // seshat now uses n-api so we shouldn't need to specify a node version to
-     // build against, but it does seems to still need something in here, so leaving
+@@ -270,29 +265,12 @@ async function buildMatrixSeshat(hakEnv:
      // it for now: we should confirm how much of this it still actually needs.
      const env = hakEnv.makeGypEnv();
  
@@ -71,7 +39,22 @@ diff -up element-desktop-1.10.11/hak/matrix-seshat/build.ts.orig element-desktop
 -    });
 -
 -    if (hakEnv.isLinux()) {
--        env.RUSTFLAGS = '-Clink-arg=-Wl,-Bsymbolic -Clink-arg=-Wl,--exclude-libs,ALL'
+-        // Ensure Element uses the statically-linked seshat build, and prevent other applications
+-        // from attempting to use this one. Detailed explanation:
+-        //
+-        // RUSTFLAGS
+-        //     An environment variable containing a list of arguments to pass to rustc.
+-        // -Clink-arg=VALUE
+-        //     A rustc argument to pass a single argument to the linker.
+-        // -Wl,
+-        //     gcc syntax to pass an argument (from gcc) to the linker (ld).
+-        // -Bsymbolic:
+-        //     Prefer local/statically linked symbols over those in the environment.
+-        //     Prevent overriding native libraries by LD_PRELOAD etc.
+-        // --exclude-libs ALL
+-        //     Prevent symbols from being exported by any archive libraries.
+-        //     Reduces output filesize and prevents being dynamically linked against.
+-        env.RUSTFLAGS = '-Clink-arg=-Wl,-Bsymbolic -Clink-arg=-Wl,--exclude-libs,ALL';
 +    if (!hakEnv.isLinux()) {
 +        Object.assign(env, {
 +            SQLCIPHER_STATIC: 1,
@@ -81,9 +64,9 @@ diff -up element-desktop-1.10.11/hak/matrix-seshat/build.ts.orig element-desktop
      }
  
      if (hakEnv.isWin()) {
-diff -up element-desktop-1.10.11/hak/matrix-seshat/check.ts.orig element-desktop-1.10.11/hak/matrix-seshat/check.ts
---- element-desktop-1.10.11/hak/matrix-seshat/check.ts.orig	2022-05-14 20:45:42.367156500 +0800
-+++ element-desktop-1.10.11/hak/matrix-seshat/check.ts	2022-05-14 20:32:29.240937137 +0800
+diff -up element-desktop-1.10.12/hak/matrix-seshat/check.ts.orig element-desktop-1.10.12/hak/matrix-seshat/check.ts
+--- element-desktop-1.10.12/hak/matrix-seshat/check.ts.orig	2022-05-10 22:30:21.000000000 +0800
++++ element-desktop-1.10.12/hak/matrix-seshat/check.ts	2022-05-14 20:32:29.240937137 +0800
 @@ -22,19 +22,21 @@ import { DependencyInfo } from '../../sc
  
  export default async function(hakEnv: HakEnv, moduleInfo: DependencyInfo): Promise<void> {
@@ -118,17 +101,9 @@ diff -up element-desktop-1.10.11/hak/matrix-seshat/check.ts.orig element-desktop
  
      const tools = [
          ['rustc', '--version'],
-@@ -42,6 +44,7 @@ export default async function(hakEnv: Ha
-     ];
-     if (hakEnv.isWin()) {
-         tools.push(['perl', '--version']); // for openssl configure
-+        tools.push(['nasm', '-v']); // for openssl building
-         tools.push(['patch', '--version']); // to patch sqlcipher Makefile.msc
-         tools.push(['nmake', '/?']);
-     } else {
-diff -up element-desktop-1.10.11/hak/matrix-seshat/fetchDeps.ts.orig element-desktop-1.10.11/hak/matrix-seshat/fetchDeps.ts
---- element-desktop-1.10.11/hak/matrix-seshat/fetchDeps.ts.orig	2022-05-14 20:45:42.367156500 +0800
-+++ element-desktop-1.10.11/hak/matrix-seshat/fetchDeps.ts	2022-05-14 20:32:29.240937137 +0800
+diff -up element-desktop-1.10.12/hak/matrix-seshat/fetchDeps.ts.orig element-desktop-1.10.12/hak/matrix-seshat/fetchDeps.ts
+--- element-desktop-1.10.12/hak/matrix-seshat/fetchDeps.ts.orig	2022-05-10 22:30:21.000000000 +0800
++++ element-desktop-1.10.12/hak/matrix-seshat/fetchDeps.ts	2022-05-14 20:32:29.240937137 +0800
 @@ -25,7 +25,9 @@ import HakEnv from '../../scripts/hak/ha
  import { DependencyInfo } from '../../scripts/hak/dep';
  

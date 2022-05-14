@@ -1,12 +1,12 @@
 %global debug_package %{nil}
 %global     forgeurl    https://github.com/vector-im/element-desktop
-Version:    1.10.11
+Version:    1.10.12
 %forgemeta
 
 %define     _electronver    electron17
 
 Name:           element-desktop
-Release:        2%{?dist}
+Release:        1%{?dist}
 Summary:        A glossy Matrix collaboration client for desktop.
 URL:            %{forgeurl}
 License:        ASL 2.0
@@ -14,7 +14,6 @@ Source0:        %{forgesource}
 Source1:        element-desktop-launcher.sh
 Source2:        io.element.Element.desktop
 Patch0:         autolaunch.patch
-Patch1:         encapsulate-sqlcipher.diff
 Patch2:         use-system-sqlcipher.diff
 
 Requires:       %{_electronver}
@@ -28,7 +27,6 @@ BuildRequires:  git
 BuildRequires:  rust
 BuildRequires:  cargo
 BuildRequires:  tcl-devel
-BuildRequires:  openssl-devel
 BuildRequires:  libsecret-devel
 BuildRequires:  sqlcipher-devel
 
@@ -73,6 +71,9 @@ done
 %{_datadir}/icons/hicolor/*/apps/io.element.Element.png
 
 %changelog
+* Sat May 14 2022 zhullyb <zhullyb@outlook.com> - 1.10.12-1
+- new version
+
 * Sat May 14 2022 zhullyb <zhullyb@outlook.com> - 1.10.11-2
 - Stop building statically-linked sqlcipher
 

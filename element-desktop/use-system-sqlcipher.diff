@@ -1,0 +1,142 @@
+diff -up element-desktop-1.10.11/hak/matrix-seshat/build.ts.orig element-desktop-1.10.11/hak/matrix-seshat/build.ts
+--- element-desktop-1.10.11/hak/matrix-seshat/build.ts.orig	2022-05-14 20:45:42.367156500 +0800
++++ element-desktop-1.10.11/hak/matrix-seshat/build.ts	2022-05-14 20:32:29.240937137 +0800
+@@ -26,13 +26,13 @@ export default async function(hakEnv: Ha
+     if (hakEnv.isWin()) {
+         await buildOpenSslWin(hakEnv, moduleInfo);
+         await buildSqlCipherWin(hakEnv, moduleInfo);
+-    } else {
++    } else if (hakEnv.isMac()) {
+         await buildSqlCipherUnix(hakEnv, moduleInfo);
+     }
+     await buildMatrixSeshat(hakEnv, moduleInfo);
+ }
+ 
+-async function buildOpenSslWin(hakEnv, moduleInfo) {
++async function buildOpenSslWin(hakEnv: HakEnv, moduleInfo: DependencyInfo) {
+     const version = moduleInfo.cfg.dependencies.openssl;
+     const openSslDir = path.join(moduleInfo.moduleTargetDotHakDir, `openssl-${version}`);
+ 
+@@ -134,7 +134,7 @@ async function buildOpenSslWin(hakEnv, m
+     });
+ }
+ 
+-async function buildSqlCipherWin(hakEnv, moduleInfo) {
++async function buildSqlCipherWin(hakEnv: HakEnv, moduleInfo: DependencyInfo) {
+     const version = moduleInfo.cfg.dependencies.sqlcipher;
+     const sqlCipherDir = path.join(moduleInfo.moduleTargetDotHakDir, `sqlcipher-${version}`);
+     const buildDir = path.join(sqlCipherDir, 'bld');
+@@ -171,7 +171,7 @@ async function buildSqlCipherWin(hakEnv,
+     );
+ }
+ 
+-async function buildSqlCipherUnix(hakEnv, moduleInfo) {
++async function buildSqlCipherUnix(hakEnv: HakEnv, moduleInfo: DependencyInfo) {
+     const version = moduleInfo.cfg.dependencies.sqlcipher;
+     const sqlCipherDir = path.join(moduleInfo.moduleTargetDotHakDir, `sqlcipher-${version}`);
+ 
+@@ -179,17 +179,12 @@ async function buildSqlCipherUnix(hakEnv
+         '--prefix=' + moduleInfo.depPrefix + '',
+         '--enable-tempstore=yes',
+         '--enable-shared=no',
+-        '--enable-tcl=no',
+     ];
+ 
+     if (hakEnv.isMac()) {
+         args.push('--with-crypto-lib=commoncrypto');
+     }
+ 
+-    if (hakEnv.isLinux()) {
+-        args.push('--with-pic=yes');
+-    }
+-
+     if (!hakEnv.isHost()) {
+         // In the nonsense world of `configure`, it is assumed you are building
+         // a compiler like `gcc`, so the `host` option actually means the target
+@@ -264,20 +259,18 @@ async function buildSqlCipherUnix(hakEnv
+     });
+ }
+ 
+-async function buildMatrixSeshat(hakEnv, moduleInfo) {
++async function buildMatrixSeshat(hakEnv: HakEnv, moduleInfo: DependencyInfo) {
+     // seshat now uses n-api so we shouldn't need to specify a node version to
+     // build against, but it does seems to still need something in here, so leaving
+     // it for now: we should confirm how much of this it still actually needs.
+     const env = hakEnv.makeGypEnv();
+ 
+-    Object.assign(env, {
+-        SQLCIPHER_STATIC: 1,
+-        SQLCIPHER_LIB_DIR: path.join(moduleInfo.depPrefix, 'lib'),
+-        SQLCIPHER_INCLUDE_DIR: path.join(moduleInfo.depPrefix, 'include'),
+-    });
+-
+-    if (hakEnv.isLinux()) {
+-        env.RUSTFLAGS = '-Clink-arg=-Wl,-Bsymbolic -Clink-arg=-Wl,--exclude-libs,ALL'
++    if (!hakEnv.isLinux()) {
++        Object.assign(env, {
++            SQLCIPHER_STATIC: 1,
++            SQLCIPHER_LIB_DIR: path.join(moduleInfo.depPrefix, 'lib'),
++            SQLCIPHER_INCLUDE_DIR: path.join(moduleInfo.depPrefix, 'include'),
++        });
+     }
+ 
+     if (hakEnv.isWin()) {
+diff -up element-desktop-1.10.11/hak/matrix-seshat/check.ts.orig element-desktop-1.10.11/hak/matrix-seshat/check.ts
+--- element-desktop-1.10.11/hak/matrix-seshat/check.ts.orig	2022-05-14 20:45:42.367156500 +0800
++++ element-desktop-1.10.11/hak/matrix-seshat/check.ts	2022-05-14 20:32:29.240937137 +0800
+@@ -22,19 +22,21 @@ import { DependencyInfo } from '../../sc
+ 
+ export default async function(hakEnv: HakEnv, moduleInfo: DependencyInfo): Promise<void> {
+     // of course tcl doesn't have a --version
+-    await new Promise<void>((resolve, reject) => {
+-        const proc = childProcess.spawn('tclsh', [], {
+-            stdio: ['pipe', 'ignore', 'ignore'],
++    if (!hakEnv.isLinux()) {
++        await new Promise<void>((resolve, reject) => {
++            const proc = childProcess.spawn('tclsh', [], {
++                stdio: ['pipe', 'ignore', 'ignore'],
++            });
++            proc.on('exit', (code) => {
++                if (code !== 0) {
++                    reject("Can't find tclsh - have you installed TCL?");
++                } else {
++                    resolve();
++                }
++            });
++            proc.stdin.end();
+         });
+-        proc.on('exit', (code) => {
+-            if (code !== 0) {
+-                reject("Can't find tclsh - have you installed TCL?");
+-            } else {
+-                resolve();
+-            }
+-        });
+-        proc.stdin.end();
+-    });
++    }
+ 
+     const tools = [
+         ['rustc', '--version'],
+@@ -42,6 +44,7 @@ export default async function(hakEnv: Ha
+     ];
+     if (hakEnv.isWin()) {
+         tools.push(['perl', '--version']); // for openssl configure
++        tools.push(['nasm', '-v']); // for openssl building
+         tools.push(['patch', '--version']); // to patch sqlcipher Makefile.msc
+         tools.push(['nmake', '/?']);
+     } else {
+diff -up element-desktop-1.10.11/hak/matrix-seshat/fetchDeps.ts.orig element-desktop-1.10.11/hak/matrix-seshat/fetchDeps.ts
+--- element-desktop-1.10.11/hak/matrix-seshat/fetchDeps.ts.orig	2022-05-14 20:45:42.367156500 +0800
++++ element-desktop-1.10.11/hak/matrix-seshat/fetchDeps.ts	2022-05-14 20:32:29.240937137 +0800
+@@ -25,7 +25,9 @@ import HakEnv from '../../scripts/hak/ha
+ import { DependencyInfo } from '../../scripts/hak/dep';
+ 
+ export default async function(hakEnv: HakEnv, moduleInfo: DependencyInfo): Promise<void> {
+-    await getSqlCipher(hakEnv, moduleInfo);
++    if (!hakEnv.isLinux()) {
++        await getSqlCipher(hakEnv, moduleInfo);
++    }
+ 
+     if (hakEnv.isWin()) {
+         await getOpenSsl(hakEnv, moduleInfo);

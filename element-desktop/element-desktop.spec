@@ -6,7 +6,7 @@ Version:    1.10.11
 %define     _electronver    electron17
 
 Name:           element-desktop
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        A glossy Matrix collaboration client for desktop.
 URL:            %{forgeurl}
 License:        ASL 2.0
@@ -15,9 +15,11 @@ Source1:        element-desktop-launcher.sh
 Source2:        io.element.Element.desktop
 Patch0:         autolaunch.patch
 Patch1:         encapsulate-sqlcipher.diff
+Patch2:         use-system-sqlcipher.diff
 
 Requires:       %{_electronver}
 Requires:       element-web = %{version}
+Requires:       sqlcipher
 BuildRequires:  python
 BuildRequires:  yarnpkg
 BuildRequires:  gcc-c++
@@ -28,6 +30,7 @@ BuildRequires:  cargo
 BuildRequires:  tcl-devel
 BuildRequires:  openssl-devel
 BuildRequires:  libsecret-devel
+BuildRequires:  sqlcipher-devel
 
 %description
 %{summary}.
@@ -70,6 +73,9 @@ done
 %{_datadir}/icons/hicolor/*/apps/io.element.Element.png
 
 %changelog
+* Sat May 14 2022 zhullyb <zhullyb@outlook.com> - 1.10.11-2
+- Stop building statically-linked sqlcipher
+
 * Tue Apr 26 2022 zhullyb <zhullyb@outlook.com> - 1.10.11-1
 - new version
 

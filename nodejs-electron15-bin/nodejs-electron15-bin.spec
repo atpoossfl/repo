@@ -1,7 +1,7 @@
 %define         _electronver        electron15
 
 Name:           nodejs-%{_electronver}-bin
-Version:        15.5.6
+Version:        15.5.7
 Release:        1%{?dist}
 Summary:        Build cross-platform desktop apps with JavaScript, HTML, and CSS
 License:        MIT
@@ -39,6 +39,9 @@ install -Dm755 %{SOURCE1} %{buildroot}%{_bindir}/%{_electronver}
 %{_datadir}/%{_electronver}/
 
 %changelog
+* Wed May 25 2022 zhullyb <zhullyb@outlook.com> - 15.5.7-1
+- new version
+
 * Tue May 24 2022 zhullyb <zhullyb@outlook.com> - 15.5.6-1
 - new version
 

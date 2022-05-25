@@ -1,6 +1,6 @@
 %global debug_package %{nil}
 %global     forgeurl    https://github.com/vector-im/element-web
-Version:    1.10.12
+Version:    1.10.13
 %forgemeta
 
 Name:           element-web
@@ -44,6 +44,9 @@ echo %{version} > %{buildroot}%{_datadir}/webapps/element/version
 %{_datadir}/webapps/element/
 
 %changelog
+* Wed May 25 2022 zhullyb <zhullyb@outlook.com> - 1.10.13-1
+- new version
+
 * Wed May 11 2022 zhullyb <zhullyb@outlook.com> - 1.10.12-1
 - new version
 - add NODE_OPTIONS to fit openssl on Fedora 36.

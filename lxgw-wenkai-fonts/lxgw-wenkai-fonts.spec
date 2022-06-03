@@ -1,5 +1,5 @@
 Name:           lxgw-wenkai-fonts
-Version:        1.234.56
+Version:        1.235.2
 Release:        1%{?dist}
 Summary:        An open-source Chinese font derived from Fontworks' Klee One.
 License:        OFL-1.1
@@ -38,6 +38,9 @@ install -m 644 %{S:5} %{buildroot}%{_ttfontsdir}
 %dir %{_ttfontsdir}
 
 %changelog
+* Fri Jun 03 2022 zhullyb <zhullyb@outlook.com> - 1.235.2-1
+- new version
+
 * Wed May 11 2022 zhullyb <zhullyb@outlook.com> - 1.234.56-1
 - new version
 

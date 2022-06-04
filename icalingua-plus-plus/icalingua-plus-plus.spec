@@ -3,7 +3,7 @@
 %global debug_package %{nil}
 
 Name:           icalingua-plus-plus
-Version:        2.6.3
+Version:        2.6.4
 Release:        1%{?dist}
 Summary:        A Linux client for QQ and more
 License:        AGPL 3.0
@@ -51,6 +51,9 @@ install -Dm644 %{S:2} %{buildroot}%{_datadir}/applications/icalingua-plus-plus.d
 %{_datadir}/icons/hicolor/512x512/apps/icalingua-plus-plus.png
 
 %changelog
+* Sat Jun 04 2022 zhullyb <zhullyb@outlook.com> - 2.6.4-1
+- new version
+
 * Sun May 22 2022 zhullyb <zhullyb@outlook.com> - 2.6.3-1
 - new version
 

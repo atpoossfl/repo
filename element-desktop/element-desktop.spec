@@ -1,6 +1,6 @@
 %global debug_package %{nil}
 %global     forgeurl    https://github.com/vector-im/element-desktop
-Version:    1.10.13
+Version:    1.10.14
 %forgemeta
 
 %define     _electronver    electron17
@@ -14,7 +14,6 @@ Source0:        %{forgesource}
 Source1:        element-desktop-launcher.sh
 Source2:        io.element.Element.desktop
 Patch0:         autolaunch.patch
-Patch2:         use-system-sqlcipher.diff
 
 Requires:       %{_electronver}
 Requires:       element-web = %{version}
@@ -71,6 +70,10 @@ done
 %{_datadir}/icons/hicolor/*/apps/io.element.Element.png
 
 %changelog
+* Tue Jun 07 2022 zhullyb <zhullyb@outlook.com> - 1.10.14-1
+- new version
+- remove the patch that use system sqlcipher, because upstream has merged that.
+
 * Wed May 25 2022 zhullyb <zhullyb@outlook.com> - 1.10.13-1
 - new version
 

@@ -1,5 +1,5 @@
-%define         _webslangver        20220312
-%define         _converterver       0.2.3
+%define         _webslangver        20220529
+%define         _converterver       0.2.4
 
 Name:           fcitx5-pinyin-zhwiki
 Version:        %{_converterver}.%{_webslangver}
@@ -30,6 +30,9 @@ install -Dm644 %{SOURCE0} %{buildroot}%{_datadir}/fcitx5/pinyin/dictionaries/zhw
 %{_datadir}/fcitx5/pinyin/dictionaries/zhwiki.dict
 
 %changelog
+* Tue Jun 14 2022 zhullyb <zhullyb@outlook.com> - 0.2.4.20220529-1
+- new version.
+
 * Wed Mar 16 2022 zhullyb <zhullyb@outlook.com> - 0.2.3.20220312-1
 - First build.
 

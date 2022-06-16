@@ -1,7 +1,7 @@
 %define         _electronver        electron18
 
 Name:           nodejs-%{_electronver}-bin
-Version:        18.3.3
+Version:        18.3.4
 Release:        1%{?dist}
 Summary:        Build cross-platform desktop apps with JavaScript, HTML, and CSS
 License:        MIT
@@ -39,6 +39,9 @@ install -Dm755 %{SOURCE1} %{buildroot}%{_bindir}/%{_electronver}
 %{_datadir}/%{_electronver}/
 
 %changelog
+* Thu Jun 16 2022 zhullyb <zhullyb@outlook.com> - 18.3.4-1
+- new version
+
 * Fri Jun 10 2022 zhullyb <zhullyb@outlook.com> - 18.3.3-1
 - new version
 

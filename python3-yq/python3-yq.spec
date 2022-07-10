@@ -1,7 +1,7 @@
 %global debug_package %{nil}
 
 Name:           python3-yq
-Version:        2.14.0
+Version:        3.0.2
 Release:        1%{?dist}
 Summary:        Command-line YAML, XML, TOML processor - jq wrapper for YAML/XML/TOML documents
 
@@ -38,5 +38,8 @@ Requires:       python3-yaml
 %{python3_sitelib}/{yq,yq-%{version}-py3.*.egg-info}
 
 %changelog
+* Sun Jul 10 2022 zhullyb <zhullyb@outlook.com> - 3.0.2-1
+- new version
+
 * Tue Mar 01 2022 zhullyb <zhullyb@outlook.com>
 - First Build.

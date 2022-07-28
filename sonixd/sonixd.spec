@@ -1,7 +1,7 @@
 %global debug_package %{nil}
 
 %global     forgeurl    https://github.com/jeffvli/sonixd
-Version:        0.15.1
+Version:        0.15.3
 %forgemeta
 
 %global     _electronver    electron13
@@ -56,5 +56,8 @@ popd
 %{_datadir}/icons/hicolor/*/apps/%{name}.png
 
 %changelog
+* Thu Jul 28 2022 zhullyb <zhullyb@outlook.com> - 0.15.3-1
+- new version
+
 * Sat May 14 2022 zhullyb <zhullyb@outlook.com>
 - First build

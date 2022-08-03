@@ -19,7 +19,7 @@ BuildRequires:  nodejs >= 2:17
 # https://rpm.nodesource.com/
 
 BuildRequires:  clang
-BuildRequires:  yarnpkg
+BuildRequires:  /usr/bin/yarn
 BuildRequires:  python
 
 %description

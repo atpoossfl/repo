@@ -19,7 +19,7 @@ Requires:       %{_electronver}
 Requires:       element-web = %{version}
 Requires:       sqlcipher
 BuildRequires:  python
-BuildRequires:  yarnpkg
+BuildRequires:  /usr/bin/yarn
 BuildRequires:  gcc-c++
 BuildRequires:  nodejs
 BuildRequires:  git

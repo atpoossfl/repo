@@ -18,7 +18,7 @@ Patch0:  marktext-arg-handling.patch
 Requires:       electron15
 Requires:       ripgrep
 BuildRequires:  nodejs
-BuildRequires:  yarnpkg
+BuildRequires:  /usr/bin/yarn
 BuildRequires:  git
 BuildRequires:  make
 BuildRequires:  gcc-c++

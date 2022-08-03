@@ -17,7 +17,7 @@ Source1:        sonixd-wrapper.sh
 Source2:        sonixd.desktop
 
 BuildRequires:  nodejs
-BuildRequires:  yarnpkg
+BuildRequires:  /usr/bin/yarn
 BuildRequires:  desktop-file-utils
 Requires:       electron13
 

@@ -18,7 +18,7 @@ Patch0:         motrix-1.16.11-npm-deps-fix.patch
 
 BuildRequires:  nodejs
 BuildRequires:  npm
-BuildRequires:  yarnpkg
+BuildRequires:  /usr/bin/yarn
 Requires:       electron11
 
 %description

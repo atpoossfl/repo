@@ -1,6 +1,6 @@
 %global debug_package %{nil}
 %global     forgeurl    https://github.com/vector-im/element-desktop
-Version:    1.11.0
+Version:    1.11.2
 %forgemeta
 
 %define     _electronver    electron17
@@ -70,6 +70,10 @@ done
 %{_datadir}/icons/hicolor/*/apps/io.element.Element.png
 
 %changelog
+* Wed Aug 03 2022 zhullyb <zhullyb@outlook.com> - 1.11.2-1
+- new version
+- regenerate autolaunch.patch
+
 * Sun Jul 10 2022 zhullyb <zhullyb@outlook.com> - 1.11.0-1
 - new version
 

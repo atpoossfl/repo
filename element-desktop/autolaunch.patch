@@ -1,9 +1,9 @@
-diff --git a/src/electron-main.ts b/src/electron-main.ts
---- a/src/electron-main.ts
-+++ b/src/electron-main.ts
-@@ -229,6 +229,7 @@ async function setupGlobals() {
-     launcher = new AutoLaunch({
-         name: vectorConfig.brand || 'Element',
+diff -up element-desktop-1.11.2/src/electron-main.ts.orig element-desktop-1.11.2/src/electron-main.ts
+--- element-desktop-1.11.2/src/electron-main.ts	2022-08-03 17:10:33.955737022 +0800
++++ element-desktop-1.11.2/src/electron-main.ts	2022-08-03 17:12:04.790209296 +0800
+@@ -204,6 +204,7 @@ async function setupGlobals(): Promise<v
+     global.launcher = new AutoLaunch({
+         name: global.vectorConfig.brand || 'Element',
          isHidden: true,
 +        path: "/usr/bin/element-desktop",
          mac: {

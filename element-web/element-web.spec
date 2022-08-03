@@ -1,6 +1,6 @@
 %global debug_package %{nil}
 %global     forgeurl    https://github.com/vector-im/element-web
-Version:    1.11.0
+Version:    1.11.2
 %forgemeta
 
 Name:           element-web
@@ -11,11 +11,8 @@ License:        ASL 2.0
 Source0:        %{forgesource}
 
 BuildRequires:  python
-BuildRequires:  yarnpkg
-
-BuildRequires:  nodejs >= 2:17
-# https://rpm.nodesource.com/
-
+BuildRequires:  /usr/bin/yarn
+BuildRequires:  nvm
 BuildRequires:  git
 
 %description
@@ -23,9 +20,22 @@ BuildRequires:  git
 
 %prep
 %forgeautosetup
-yarn install --no-fund
 
 %build
+_ensure_local_nvm() {
+  which nvm >/dev/null 2>&1 && nvm deactivate && nvm unload
+  export NVM_DIR="%{_builddir}/.nvm"
+
+  # The init script returns 3 if version specified
+  # in ./.nvrc is not installed in $NVM_DIR
+  # but nvm itself still gets loaded ok
+  source /usr/share/nvm/init-nvm.sh || [[ $? != 1 ]]
+}
+
+_ensure_local_nvm
+nvm install 17
+
+yarn install --no-fund
 export NODE_OPTIONS=--openssl-legacy-provider
 VERSION=%{version} yarn build --offline
 
@@ -44,6 +54,10 @@ echo %{version} > %{buildroot}%{_datadir}/webapps/element/version
 %{_datadir}/webapps/element/
 
 %changelog
+* Wed Aug 03 2022 zhullyb <zhullyb@outlook.com> - 1.11.2-1
+- new version
+- use nvm install of nodejs 17
+
 * Sun Jul 10 2022 zhullyb <zhullyb@outlook.com> - 1.11.0-1
 - new version
 

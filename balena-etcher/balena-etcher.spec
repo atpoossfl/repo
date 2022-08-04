@@ -4,7 +4,7 @@
 
 Name:           balena-etcher
 Version:        1.7.9
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Flash OS images to SD cards & USB drives, safely and easily.
 License:        ASL 2.0
 Url:            https://github.com/balena-io/etcher
@@ -12,7 +12,7 @@ Source0:        %{url}/archive/refs/tags/v%{version}.tar.gz
 Source1:        balena-etcher-electron.sh
 Source2:        balena-etcher-electron.desktop
 BuildRequires:  clang
-BuildRequires:  nodejs
+BuildRequires:  nvm
 BuildRequires:  npm
 
 Requires:       electron12
@@ -27,6 +27,19 @@ AutoReqProv: no
 %autosetup -n etcher-%{version}
 
 %build
+_ensure_local_nvm() {
+  which nvm >/dev/null 2>&1 && nvm deactivate && nvm unload
+  export NVM_DIR="%{_builddir}/.nvm"
+
+  # The init script returns 3 if version specified
+  # in ./.nvrc is not installed in $NVM_DIR
+  # but nvm itself still gets loaded ok
+  source /usr/share/nvm/init-nvm.sh || [[ $? != 1 ]]
+}
+
+_ensure_local_nvm
+nvm install 16
+
 npm install
 npm run webpack
 npm prune --production
@@ -55,6 +68,9 @@ done
 %{_datadir}/icons/hicolor/*/apps/balena-etcher-electron.png
 
 %changelog
+* Thu Aug 04 2022 zhullyb <zhullyb@outlook.com> - 1.7.9-2
+- use nvm to build successfullly
+
 * Fri Apr 22 2022 zhullyb <zhullyb@outlook.com> - 1.7.9-1
 - new version
 

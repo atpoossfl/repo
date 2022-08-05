@@ -4,7 +4,7 @@
 
 Name:           motrix
 Version:        1.6.11
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        A full-featured download manager.
 License:        MIT
 Url:            https://github.com/agalwood/Motrix
@@ -12,12 +12,8 @@ Source0:        https://github.com/agalwood/Motrix/archive/refs/tags/v%{version}
 Source1:        motrix-launcher.sh
 Source2:        motrix.desktop
 Source3:        motrix.xml
-Patch0:         motrix-1.16.11-npm-deps-fix.patch
-# Motrix 1.6.11 can't be built normally, fixed in future version but not tagged yet.
-# https://github.com/agalwood/Motrix/commit/7868a4870b9bc485c66174f7bf4b92ed324f5458
 
 BuildRequires:  nvm
-BuildRequires:  npm
 BuildRequires:  /usr/bin/yarn
 Requires:       electron11
 
@@ -39,7 +35,7 @@ _ensure_local_nvm() {
 }
 
 _ensure_local_nvm
-nvm install 16
+nvm install 14
 
 yarn
 yarn run build:dir
@@ -60,6 +56,10 @@ install -Dm644 %{SOURCE3} %{buildroot}%{_datadir}/mime/packages/motrix.xml
 %{_datadir}/mime/packages/motrix.xml
 
 %changelog
+* Fri Aug 05 2022 zhullyb <zhullyb@outlook.com> - 1.6.11-4
+- use nodejs14 so we can remove the patch
+- remove npm
+
 * Thu Aug 04 2022 zhullyb <zhullyb@outlook.com> - 1.6.11-3
 - use nvm to build successfullly
 

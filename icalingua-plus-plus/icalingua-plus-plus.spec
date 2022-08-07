@@ -4,7 +4,7 @@
 
 Name:           icalingua-plus-plus
 Version:        2.6.6
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        A Linux client for QQ and more
 License:        AGPL 3.0
 Url:            https://github.com/Icalingua-plus-plus/Icalingua-plus-plus
@@ -15,9 +15,7 @@ Patch0:         icalingua-build-production.patch
 
 Requires:       electron17
 
-BuildRequires:  nodejs >= 2:17
-# https://rpm.nodesource.com/
-
+BuildRequires:  nvm
 BuildRequires:  clang
 BuildRequires:  /usr/bin/yarn
 BuildRequires:  python
@@ -30,7 +28,20 @@ BuildRequires:  python
 %patch0
 
 %build
+_ensure_local_nvm() {
+  which nvm >/dev/null 2>&1 && nvm deactivate && nvm unload
+  export NVM_DIR="%{_builddir}/.nvm"
+
+  # The init script returns 3 if version specified
+  # in ./.nvrc is not installed in $NVM_DIR
+  # but nvm itself still gets loaded ok
+  source /usr/share/nvm/init-nvm.sh || [[ $? != 1 ]]
+}
+
+_ensure_local_nvm
+nvm install 17
 export NODE_OPTIONS=--openssl-legacy-provider
+
 cd icalingua
 yarn
 yarn build:ci
@@ -51,6 +62,9 @@ install -Dm644 %{S:2} %{buildroot}%{_datadir}/applications/icalingua-plus-plus.d
 %{_datadir}/icons/hicolor/512x512/apps/icalingua-plus-plus.png
 
 %changelog
+* Sun Aug 07 2022 zhullyb <zhullyb@outlook.com> - 2.6.6-2
+- use nvm install of nodejs 17
+
 * Sun Jul 10 2022 zhullyb <zhullyb@outlook.com> - 2.6.6-1
 - new version
 
